@@ -1,2 +1,3 @@
 # Currency-exchange
-Microservice architecture using spring cloud
+Project is in process of developing
+
