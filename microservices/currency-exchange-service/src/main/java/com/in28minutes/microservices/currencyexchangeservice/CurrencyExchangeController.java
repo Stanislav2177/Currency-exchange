@@ -1,6 +1,7 @@
 package com.in28minutes.microservices.currencyexchangeservice;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,10 +54,17 @@ public class CurrencyExchangeController {
 		currencyExchange.setFrom(from);
 		currencyExchange.setConversionMultiple(value);
 		currencyExchange.setTo(to);
+		currencyExchange.setEnvironment(environment.getProperty("local.server.port"));
 
 		repository.save(currencyExchange);
 
 		return currencyExchange;
+	}
+
+	@GetMapping("/currency-exchange/list-all-exchanges")
+	public List<CurrencyExchange> listAllCurrencyExchanges(){
+		logger.info("All currency exchanges are received successfully");
+		return repository.findAll();
 	}
 
 

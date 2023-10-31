@@ -13,16 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-@Configuration(proxyBeanMethods = false)
-class RestTemplateConfiguration{
 
-	@Bean
-	RestTemplate restTemplate(RestTemplateBuilder builder){
-		return builder.build();
-	}
-
-
-}
 @RestController
 public class CurrencyConversionController {
 	
@@ -42,6 +33,7 @@ public class CurrencyConversionController {
 		HashMap<String, String> uriVariables = new HashMap<>();
 		uriVariables.put("from",from);
 		uriVariables.put("to",to);
+//		uriVariables.put("quantity", String.valueOf(quantity));
 		
 		ResponseEntity<CurrencyConversion> responseEntity = restTemplate.getForEntity
 		("http://localhost:8000/currency-exchange/from/{from}/to/{to}", 
@@ -54,7 +46,6 @@ public class CurrencyConversionController {
 				currencyConversion.getConversionMultiple(), 
 				quantity.multiply(currencyConversion.getConversionMultiple()), 
 				currencyConversion.getEnvironment()+ " " + "rest template");
-		
 	}
 
 	@GetMapping("/currency-conversion-feign/from/{from}/to/{to}/quantity/{quantity}")
@@ -72,8 +63,4 @@ public class CurrencyConversionController {
 				quantity.multiply(currencyConversion.getConversionMultiple()), 
 				currencyConversion.getEnvironment() + " " + "feign");
 	}
-
-
-
-
 }

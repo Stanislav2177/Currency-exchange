@@ -2,8 +2,10 @@ Currency Exchange Service
 http://localhost:8000/currency-exchange/from/USD/to/INR
 
 Currency Conversion Service
-4
 http://localhost:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
+
+Currency Tax calculation Service
+http://localhost:8200/currency-tax-calculation/from/BGN/to/USD/quantity/10
 
 Eureka
 http://localhost:8761/

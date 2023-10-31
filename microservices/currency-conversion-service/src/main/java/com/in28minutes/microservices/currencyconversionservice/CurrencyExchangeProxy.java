@@ -15,8 +15,4 @@ public interface CurrencyExchangeProxy {
 	public CurrencyConversion retrieveExchangeValue(
 			@PathVariable("from") String from,
 			@PathVariable("to") String to);
-
-
-
-
 }
