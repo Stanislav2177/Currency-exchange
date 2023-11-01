@@ -14,45 +14,40 @@ import java.util.HashMap;
 
 @RestController
 public class TaxCalculationController {
-
-
     Logger logger = LoggerFactory.getLogger(TaxCalculationController.class);
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    CurrencyTaxService calculateTax;
+
     @GetMapping("/currency-tax-calculation/from/{from}/to/{to}/quantity/{quantity}")
-    public CurrencyTax calculateCurrencyTax(
+    public ResponseEntity<CurrencyTax> calculateCurrencyTax(
             @PathVariable String from,
             @PathVariable String to,
             @PathVariable BigDecimal quantity
-            ){
-
+    ){
         HashMap<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("from",from);
-        uriVariables.put("to",to);
+        uriVariables.put("from", from);
+        uriVariables.put("to", to);
         uriVariables.put("quantity", String.valueOf(quantity));
 
-        ResponseEntity<CurrencyTax> responseEntity = restTemplate.getForEntity
-                ("http://localhost:8100/currency-conversion/from/{from}/to/{to}/quantity/{quantity}",
-                        CurrencyTax.class, uriVariables);
+        ResponseEntity<CurrencyTax> responseEntity = restTemplate.getForEntity(
+                "http://localhost:8100/currency-conversion/from/{from}/to/{to}/quantity/{quantity}",
+                CurrencyTax.class, uriVariables
+        );
 
         CurrencyTax currencyTax = responseEntity.getBody();
 
+        if(currencyTax == null){
+            ResponseEntity.notFound();
+        }
 
-        CurrencyTax calculated = new CurrencyTax(currencyTax.getId(),
-                from, to, currencyTax.getQuantity(),
-                currencyTax.getConversionMultiple(),
-                quantity.multiply(currencyTax.getConversionMultiple()),
-                currencyTax.getEnvironment()+ " " + "rest template");
-
+        CurrencyTax calculated = calculateTax.calculateTax(currencyTax, from, to, quantity);
         logger.info("DATA IS RECEIVED From the currency-conversion microservice " + calculated);
 
-        calculated.setTaxRate(BigDecimal.valueOf(4.33));
-        BigDecimal taxRate = calculated.getTaxRate();
-        BigDecimal conversionMultiple = calculated.getConversionMultiple();
-        BigDecimal total = taxRate.multiply(conversionMultiple).multiply(quantity);
-        calculated.setCalculatedTax(total);
-
-        return calculated;
+        return ResponseEntity.ok(calculated);
     }
+
 
 }

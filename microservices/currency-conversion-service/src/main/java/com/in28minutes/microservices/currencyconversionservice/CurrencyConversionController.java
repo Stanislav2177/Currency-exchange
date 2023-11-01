@@ -24,7 +24,7 @@ public class CurrencyConversionController {
 	private RestTemplate restTemplate;
 	
 	@GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
-	public CurrencyConversion calculateCurrencyConversion(
+	public ResponseEntity<CurrencyConversion> calculateCurrencyConversion(
 			@PathVariable String from,
 			@PathVariable String to,
 			@PathVariable BigDecimal quantity
@@ -40,12 +40,13 @@ public class CurrencyConversionController {
 				CurrencyConversion.class, uriVariables);
 		
 		CurrencyConversion currencyConversion = responseEntity.getBody();
-		
-		return new CurrencyConversion(currencyConversion.getId(), 
-				from, to, quantity, 
-				currencyConversion.getConversionMultiple(), 
-				quantity.multiply(currencyConversion.getConversionMultiple()), 
-				currencyConversion.getEnvironment()+ " " + "rest template");
+
+		CurrencyConversion conversion = new CurrencyConversion(currencyConversion.getId(),
+				from, to, quantity,
+				currencyConversion.getConversionMultiple(),
+				quantity.multiply(currencyConversion.getConversionMultiple()),
+				currencyConversion.getEnvironment() + " " + "rest template");
+		return ResponseEntity.ok(conversion);
 	}
 
 	@GetMapping("/currency-conversion-feign/from/{from}/to/{to}/quantity/{quantity}")
