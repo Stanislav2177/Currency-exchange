@@ -18,6 +18,8 @@ public class ApiGatewayConfiguration {
                                 .addRequestHeader("MyHeader", "MyURI")
                                 .addRequestParameter("Param", "MyValue"))
                         .uri("http://httpbin.org:80"))
+                .route(p -> p.path("/currency-tax-calculation/**")
+                        .uri("lb://currency-tax-calculation"))
                 .route(p -> p.path("/currency-exchange/**")
                         .uri("lb://currency-exchange"))
                 .route(p -> p.path("/currency-conversion/**")
