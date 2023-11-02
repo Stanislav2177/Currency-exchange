@@ -43,3 +43,11 @@ Custom Routes
 - http://localhost:8765/currency-conversion-feign/from/USD/to/INR/quantity/10
 
 - http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10
+
+- http://localhost:8765/currency-tax-calculation/from/BGN/to/USD/quantity/12
+    {
+        "from": "BGN",
+        "to": "EUR",
+        "value": 2.00
+    }
+- http://localhost:8765/currency-tax-calculation/add-tax-rate/from/{from}/to/{to}/with-rate/{value}
