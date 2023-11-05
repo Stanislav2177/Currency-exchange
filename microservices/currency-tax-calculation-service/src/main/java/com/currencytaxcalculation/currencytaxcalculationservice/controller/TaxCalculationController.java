@@ -74,6 +74,29 @@ public class TaxCalculationController {
         return ResponseEntity.ok(currencyTax);
     }
 
+    @PostMapping("/change-tax-rate/from/{from}/to/{to}/with-rate/{value}")
+    public ResponseEntity<CurrencyTax> changeTaxRate(
+            @PathVariable String from,
+            @PathVariable String to,
+            @PathVariable BigDecimal value){
+        List<CurrencyTax> currencyTaxes = service.allTaxesRelationships();
+        CurrencyTax updated = new CurrencyTax();
+
+        for (CurrencyTax currencyTax : currencyTaxes) {
+            if(currencyTax.getFrom().equals(from) &&
+            currencyTax.getTo().equals(to)){
+                currencyTax.setTaxRate(value);
+                updated = currencyTax;
+            }
+        }
+        updated.setTaxRate(value);
+        service.updateTax(updated);
+
+
+
+        return ResponseEntity.ok(updated);
+    }
+
     @GetMapping("/display-all")
     public ResponseEntity<List<CurrencyTax>> displayAll(){
         List<CurrencyTax> currencyTaxes = service.allTaxesRelationships();

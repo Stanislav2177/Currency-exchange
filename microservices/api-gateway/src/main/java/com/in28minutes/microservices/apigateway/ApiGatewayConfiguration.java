@@ -33,5 +33,4 @@ public class ApiGatewayConfiguration {
                         .uri("lb://currency-conversion"))
                 .build();
     }
-
 }

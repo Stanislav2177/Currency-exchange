@@ -47,6 +47,12 @@ public class CurrencyTaxService {
         return currencyTax;
     }
 
+    public CurrencyTax updateTax(CurrencyTax currencyTax){
+        repository.delete(currencyTax);
+        CurrencyTax save = repository.save(currencyTax);
+        return save;
+    }
+
     public List<CurrencyTax> allTaxesRelationships(){
         return repository.findAll();
     }
