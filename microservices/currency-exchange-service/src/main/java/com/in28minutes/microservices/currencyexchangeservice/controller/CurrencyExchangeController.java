@@ -32,8 +32,17 @@ public class CurrencyExchangeController {
 
 		logger.info("retrieveExchangeValue called with {} to {}", from, to);
 
-		CurrencyExchange currencyExchange
-					= repository.findByFromAndTo(from, to);
+
+		CurrencyExchange currencyExchange = new CurrencyExchange();
+		List<CurrencyExchange> all = repository.findAll();
+		for (CurrencyExchange exchange : all) {
+			if(exchange.getFrom().equals(from) &&
+			exchange.getTo().equals(to)){
+				currencyExchange = exchange;
+			}
+		}
+
+
 
 		if(currencyExchange ==null) {
 			throw new RuntimeException
